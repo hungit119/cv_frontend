@@ -7,14 +7,20 @@ import { store } from "./app/store";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 import ContextApi from "./components/ContextApi/ContextApi";
+import GlobalStyle from "./components/GlobalStyle/GlobalStyle";
+import { ProSidebarProvider } from "react-pro-sidebar";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Provider store={store}>
-    <BrowserRouter>
-      <ContextApi>
-        <App />
-      </ContextApi>
-    </BrowserRouter>
+    <ProSidebarProvider>
+      <BrowserRouter>
+        <ContextApi>
+          <GlobalStyle>
+            <App />
+          </GlobalStyle>
+        </ContextApi>
+      </BrowserRouter>
+    </ProSidebarProvider>
   </Provider>
 );
 

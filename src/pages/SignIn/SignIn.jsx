@@ -26,6 +26,7 @@ import { setIsLoading } from "../../features/ProcessSlice";
 import { LinearProgress } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { ACCESS_TOKEN } from "../../constant";
+import { setUser } from "../../features/UserSlice";
 
 function Copyright(props) {
   return (
@@ -69,6 +70,7 @@ export default function SignIn() {
         .then((response) => {
           localStorage.setItem(ACCESS_TOKEN, response.accessToken);
           dispatch(setIsAuthenticate(true));
+          dispatch(setUser(response.user));
           toast.success(response.message);
           navigate("/");
           dispatch(setIsLoading(false));

@@ -7,6 +7,7 @@ import config from "../../config";
 import { responseHandler } from "../../services/responseHandler";
 import { setIsLoading } from "../../features/ProcessSlice";
 import { ACCESS_TOKEN } from "../../constant";
+import { setUser } from "../../features/UserSlice";
 
 const ContextApi = (props) => {
   const dispatch = useDispatch();
@@ -24,6 +25,7 @@ const ContextApi = (props) => {
       });
       const rsData = responseHandler(response);
       dispatch(setIsAuthenticate(rsData.success));
+      dispatch(setUser(rsData.user));
       dispatch(setIsLoading(false));
     } catch (error) {
       dispatch(setIsAuthenticate(false));
