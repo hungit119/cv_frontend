@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Menu, MenuItem, Sidebar, useProSidebar } from "react-pro-sidebar";
 import style from "./DashBoard.scss";
 import classNames from "classnames/bind";
@@ -10,79 +10,102 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import PersonIcon from "@mui/icons-material/Person";
 import WorkIcon from "@mui/icons-material/Work";
+import SearchIcon from "@mui/icons-material/Search";
 import { NavLink, Route, Routes } from "react-router-dom";
+import ReorderIcon from "@mui/icons-material/Reorder";
 import { ACCESS_TOKEN } from "../../constant";
 import HomePage from "../HomePage/HomePage";
+import NavLinkMenuItem from "../components/NavLinkMenuItem/NavLinkMenuItem";
 const cx = classNames.bind(style);
 export default function DashBoard() {
-  const { collapseSidebar, toggleSidebar, collapsed, toggled, broken, rtl } =
-    useProSidebar();
+  const { collapseSidebar, toggleSidebar, broken, rtl } = useProSidebar();
   const handleLogout = () => {
     localStorage.removeItem(ACCESS_TOKEN);
     window.location.reload();
   };
+  const [collapsed, setCollapsed] = useState(false);
   return (
     <div
       id="app"
       style={({ height: "100vh" }, { display: "flex", flexDirection: "row" })}
     >
       <Sidebar
-        style={{ height: "100vh" }}
-        backgroundColor="#ffffff"
-        rtl={false}
+        style={{ height: "100vh", zIndex: "100000", border: "none" }}
+        backgroundColor="rgb(38, 50, 77)"
         transitionDuration={800}
+        collapsed={collapsed}
+        collapsedWidth="0"
       >
         <Menu
           menuItemStyles={{
             button: ({ level, active, disabled }) => {
               // only apply styles on first level elements of the tree
-              if (level === 0)
-                return {
-                  color: "#40484F",
-                  fontWeight: "500",
-                  ":hover": {
-                    transition: "all 0.2s ease-in-out",
-                    backgroundColor: "#434CE7",
-                    color: "#ffffff",
-                    borderTopLeftRadius: "15px",
-                    borderBottomLeftRadius: "15px",
-                  },
-                };
+              if (level === 0) return {};
             },
           }}
         >
-          <MenuItem
-            icon={<MenuOutlinedIcon />}
-            onClick={() => {
-              collapseSidebar();
-            }}
+          <div
             style={{ textAlign: "center" }}
+            active
+            className={cx("logo-wrapper")}
           >
-            {" "}
-            <h2>
-              YourCV <WorkIcon style={{ marginTop: "2px" }} />{" "}
-            </h2>
-          </MenuItem>
-          <NavLink to={"/"}>
-            <MenuItem icon={<HomeIcon />}>Home</MenuItem>
-          </NavLink>
-          <NavLink to={"/my-cv"}>
-            <MenuItem icon={<InventoryIcon />}>My CV</MenuItem>
-          </NavLink>
-          <NavLink to={"/edit-cv"}>
-            <MenuItem icon={<EditIcon />}>Edit CV</MenuItem>
-          </NavLink>
-          <NavLink to={"/profile"}>
-            <MenuItem icon={<PersonIcon />}>Profile</MenuItem>
-          </NavLink>
-          <MenuItem icon={<LogoutIcon />} onClick={handleLogout}>
-            Logout
-          </MenuItem>
+            <img
+              src={"https://jumbo.g-axon.work/images/logo.png"}
+              alt=""
+              className={cx("logo")}
+            />
+            <ReorderIcon
+              onClick={() => {
+                setCollapsed(!collapsed);
+              }}
+              style={{ cursor: "pointer", color: "#ffffff" }}
+            />
+          </div>
+          <div className={cx("home-item")}>MAIN</div>
+          <NavLinkMenuItem path={"/"} text={"Home"} />
+          <NavLinkMenuItem path={"/edit-cv"} text={"Edit cv"} />
+          <NavLinkMenuItem path={"/new-cv"} text={"New cv"} />
+          <NavLinkMenuItem path={"/my-cv"} text={"My cv"} />
+          <div className={cx("home-item")}>PERSONAL</div>
+          <NavLinkMenuItem path={"/profile"} text={"Profile"} />
+          <div className={cx("home-item")}>OTHER</div>
+          <NavLinkMenuItem path={"#"} text={"Logout"} />
         </Menu>
       </Sidebar>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-      </Routes>
+      <div className={cx("header")}>
+        <div className={cx("header-content")}>
+          <div className={cx("header-left-content")}>
+            <button
+              className={cx("expand")}
+              onClick={() => setCollapsed(!collapsed)}
+            >
+              <ReorderIcon />
+              <span className={cx("expand-span")}></span>
+            </button>
+            <div className={cx("search")}>
+              <div className={cx("search-icon-wrapper")}>
+                <SearchIcon className={cx("search-icon")} />
+              </div>
+              <div className={cx("search-wrapper-input")}>
+                <input
+                  type="text"
+                  className={cx("search-input")}
+                  placeholder="Search anything"
+                />
+              </div>
+            </div>
+          </div>
+          <div className={cx("avata-wrapper")}>
+            <span className={cx("avata")}>
+              <img
+                src="https://jumbo.g-axon.work/images/avatar/avatar3.jpg"
+                alt=""
+                className={cx("avatar-image")}
+              />
+            </span>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
