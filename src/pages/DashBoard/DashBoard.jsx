@@ -1,36 +1,42 @@
-import React, { useState } from "react";
-import { Menu, MenuItem, Sidebar, useProSidebar } from "react-pro-sidebar";
-import style from "./DashBoard.scss";
 import classNames from "classnames/bind";
+import React, { useRef, useState } from "react";
+import { Menu, Sidebar, useProSidebar } from "react-pro-sidebar";
+import style from "./DashBoard.scss";
 
-import EditIcon from "@mui/icons-material/Edit";
-import HomeIcon from "@mui/icons-material/Home";
-import InventoryIcon from "@mui/icons-material/Inventory";
-import LogoutIcon from "@mui/icons-material/Logout";
-import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
-import PersonIcon from "@mui/icons-material/Person";
-import WorkIcon from "@mui/icons-material/Work";
-import SearchIcon from "@mui/icons-material/Search";
-import { NavLink, Route, Routes } from "react-router-dom";
 import ReorderIcon from "@mui/icons-material/Reorder";
+import SearchIcon from "@mui/icons-material/Search";
 import { ACCESS_TOKEN } from "../../constant";
-import HomePage from "../HomePage/HomePage";
 import NavLinkMenuItem from "../components/NavLinkMenuItem/NavLinkMenuItem";
+import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
+import ModeEditRoundedIcon from "@mui/icons-material/ModeEditRounded";
+import AddBoxRoundedIcon from "@mui/icons-material/AddBoxRounded";
+import ViewListRoundedIcon from "@mui/icons-material/ViewListRounded";
+import Person2RoundedIcon from "@mui/icons-material/Person2Rounded";
+import LowPriorityRoundedIcon from "@mui/icons-material/LowPriorityRounded";
+import { Route, Routes } from "react-router-dom";
+import FormCV from "../components/FormCV/FormCV";
 const cx = classNames.bind(style);
 export default function DashBoard() {
-  const { collapseSidebar, toggleSidebar, broken, rtl } = useProSidebar();
+  const asideRef = useRef(null);
   const handleLogout = () => {
     localStorage.removeItem(ACCESS_TOKEN);
     window.location.reload();
   };
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(true);
   return (
     <div
       id="app"
       style={({ height: "100vh" }, { display: "flex", flexDirection: "row" })}
     >
       <Sidebar
-        style={{ height: "100vh", zIndex: "100000", border: "none" }}
+        ref={asideRef}
+        style={{
+          zIndex: "100000",
+          border: "none",
+          position: "fixed",
+          bottom: "0",
+          top: "0",
+        }}
         backgroundColor="rgb(38, 50, 77)"
         transitionDuration={800}
         collapsed={collapsed}
@@ -54,34 +60,64 @@ export default function DashBoard() {
               alt=""
               className={cx("logo")}
             />
-            <ReorderIcon
-              onClick={() => {
-                setCollapsed(!collapsed);
-              }}
-              style={{ cursor: "pointer", color: "#ffffff" }}
-            />
-          </div>
-          <div className={cx("home-item")}>MAIN</div>
-          <NavLinkMenuItem path={"/"} text={"Home"} />
-          <NavLinkMenuItem path={"/edit-cv"} text={"Edit cv"} />
-          <NavLinkMenuItem path={"/new-cv"} text={"New cv"} />
-          <NavLinkMenuItem path={"/my-cv"} text={"My cv"} />
-          <div className={cx("home-item")}>PERSONAL</div>
-          <NavLinkMenuItem path={"/profile"} text={"Profile"} />
-          <div className={cx("home-item")}>OTHER</div>
-          <NavLinkMenuItem path={"#"} text={"Logout"} />
-        </Menu>
-      </Sidebar>
-      <div className={cx("header")}>
-        <div className={cx("header-content")}>
-          <div className={cx("header-left-content")}>
             <button
               className={cx("expand")}
               onClick={() => setCollapsed(!collapsed)}
             >
-              <ReorderIcon />
+              <LowPriorityRoundedIcon />
               <span className={cx("expand-span")}></span>
             </button>
+          </div>
+          <div className={cx("home-item")}>MAIN</div>
+          <NavLinkMenuItem
+            path={"/"}
+            text={"Home"}
+            icon={<HomeRoundedIcon />}
+          />
+          <NavLinkMenuItem
+            path={"/edit-cv"}
+            text={"Edit cv"}
+            icon={<ModeEditRoundedIcon />}
+          />
+          <NavLinkMenuItem
+            path={"/new-cv"}
+            text={"New cv"}
+            icon={<AddBoxRoundedIcon />}
+          />
+          <NavLinkMenuItem
+            path={"/my-cv"}
+            text={"My cv"}
+            icon={<ViewListRoundedIcon />}
+          />
+          <div className={cx("home-item")}>PERSONAL</div>
+          <NavLinkMenuItem
+            path={"/profile"}
+            text={"Profile"}
+            icon={<Person2RoundedIcon />}
+          />
+          <div className={cx("home-item")}>OTHER</div>
+        </Menu>
+      </Sidebar>
+      <div
+        className={cx("header")}
+        style={{
+          marginLeft: 250 - asideRef.current?.clientWidth,
+          width: `calc(100% - ${250 - asideRef.current?.clientWidth}px) `,
+        }}
+      >
+        <div className={cx("header-content")}>
+          <div className={cx("header-left-content")}>
+            {asideRef.current?.clientWidth === 0 ? (
+              <></>
+            ) : (
+              <button
+                className={cx("expand")}
+                onClick={() => setCollapsed(!collapsed)}
+              >
+                <ReorderIcon />
+                <span className={cx("expand-span")}></span>
+              </button>
+            )}
             <div className={cx("search")}>
               <div className={cx("search-icon-wrapper")}>
                 <SearchIcon className={cx("search-icon")} />
@@ -105,6 +141,17 @@ export default function DashBoard() {
             </span>
           </div>
         </div>
+      </div>
+      <div
+        className={cx("content")}
+        style={{
+          marginLeft: 250 - asideRef.current?.clientWidth,
+          width: `calc(100% - ${250 - asideRef.current?.clientWidth}px) `,
+        }}
+      >
+        <Routes>
+          <Route path="/new-cv" element={<FormCV />} />
+        </Routes>
       </div>
     </div>
   );

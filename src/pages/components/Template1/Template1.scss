@@ -1,0 +1,22 @@
+.wrapper {
+  width: 100%;
+}
+.cv-content {
+  margin: 10px;
+  border: 1px solid lightsalmon;
+  padding: 32px;
+}
+.header-form-cv {
+  display: flex;
+  justify-content: center;
+}
+.fake-image {
+  position: absolute;
+  top: -5px;
+  width: 300px;
+  height: 250px;
+  background: url("../../../access/fake1.png") no-repeat;
+  background-position: center; /* Center the image */
+  background-repeat: no-repeat; /* Do not repeat the image */
+  background-size: contain; /* Resize the background image to cover the entire container */
+}
