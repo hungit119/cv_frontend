@@ -11,7 +11,7 @@ const Div = styled.div`
     right: 0;
   }
   &:hover {
-    outline: #77a5cc dashed 1pt;
+    outline: red dashed 1pt;
     .btn-add-item-section {
       display: flex;
     }

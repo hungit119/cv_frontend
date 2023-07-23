@@ -199,3 +199,8 @@ main {
   width: 100%;
   transition: all 0.8s ease;
 }
+@media screen and (max-width: 500px) {
+  .header {
+    padding: 0;
+  }
+}

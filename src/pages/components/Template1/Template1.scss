@@ -20,3 +20,8 @@
   background-repeat: no-repeat; /* Do not repeat the image */
   background-size: contain; /* Resize the background image to cover the entire container */
 }
+@media screen and (max-width: 1000px) {
+  .fake-image {
+    display: none;
+  }
+}

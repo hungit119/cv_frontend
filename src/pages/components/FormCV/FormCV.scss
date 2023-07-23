@@ -80,3 +80,8 @@
   background-color: white;
   margin-top: 110px;
 }
+@media screen and (max-width: 800px) {
+  .top-tool {
+    display: none;
+  }
+}

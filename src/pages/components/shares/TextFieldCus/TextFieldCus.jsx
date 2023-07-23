@@ -18,6 +18,9 @@ const Input = styled.textarea`
     font-weight: 100;
     font-family: "Courier New", Courier, monospace;
   }
+  @media screen and (max-width: 400px) {
+    /* The width is 100%, when the viewport is 800px or smaller */
+  }
 `;
 const TextFieldCus = ({
   fontsize,

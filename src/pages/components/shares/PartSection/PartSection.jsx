@@ -8,6 +8,7 @@ const Div = styled.div`
   padding: 4px;
   border: 1px dotted transparent;
   position: relative;
+  border-bottom: 1px dotted#77a5cc;
   .icon-delete-section-item {
     display: none;
     position: absolute;
