@@ -1,32 +1,13 @@
-import ArrowDownwardRoundedIcon from "@mui/icons-material/ArrowDownwardRounded";
-import AutoAwesomeMotionRoundedIcon from "@mui/icons-material/AutoAwesomeMotionRounded";
-import ColorLensIcon from "@mui/icons-material/ColorLens";
-import DownloadRoundedIcon from "@mui/icons-material/DownloadRounded";
-import FontDownloadRoundedIcon from "@mui/icons-material/FontDownloadRounded";
-import ManageAccountsRoundedIcon from "@mui/icons-material/ManageAccountsRounded";
-import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
-import PhotoRoundedIcon from "@mui/icons-material/PhotoRounded";
-import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
-import SettingsIcon from "@mui/icons-material/Settings";
-import IconButton from "@mui/material/IconButton";
+import axios from "axios";
 import classNames from "classnames/bind";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 import styled from "styled-components";
-import Template1 from "../Template1/Template1";
-import TippyHeadLess from "../TippyHeadless/TippyHeadless";
-import styles from "./FormCV.scss";
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-} from "@mui/material";
-import axios from "axios";
 import config from "../../../config";
 import { responseHandler } from "../../../services/responseHandler";
+import Template1 from "../Template1/Template1";
+import styles from "./FormCV.scss";
 const cx = classNames.bind(styles);
 const Div = styled.div`
   position: fixed;
@@ -100,122 +81,20 @@ const FormCV = () => {
         })
         .then((response) => responseHandler(response))
         .then((response) => {
-          console.log(response);
+          toast.success(response.message, {
+            theme: "colored",
+          });
+          setOpen(false);
         });
     } catch (error) {
+      toast.error(error.response.data.message, {
+        theme: "colored",
+      });
       setOpen(false);
     }
   };
   return (
     <div className={cx("wrapper")}>
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">{"Lưu CV"}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Bạn có chắc chắn muốn lưu lại cv này ?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleClickSaveCv} autoFocus>
-            Save
-          </Button>
-        </DialogActions>
-      </Dialog>
-      <Div>
-        <DivSetting className="setting-tools">
-          <div className="setting-tools-wrapper">
-            <ColorLensIcon style={{ color: "#19243B", marginRight: "5px" }} />
-            <FontDownloadRoundedIcon
-              style={{ color: "#19243B", marginRight: "5px" }}
-            />
-            <DownloadRoundedIcon
-              style={{ color: "#19243B", marginRight: "5px" }}
-            />
-            <ManageAccountsRoundedIcon
-              style={{ color: "#19243B", marginRight: "5px" }}
-            />
-          </div>
-        </DivSetting>
-        <IconButton
-          aria-label="delete"
-          size="large"
-          className={cx("icon-setting-tool-top")}
-        >
-          <div className="icon-wrapper-setting">
-            <SettingsIcon fontSize="inherit" style={{ color: " #19243b;" }} />
-          </div>
-        </IconButton>
-      </Div>
-      <div className={cx("top-tool")}>
-        <div className={cx("toolbar")}>
-          <div className={cx("toolbar-left")}>
-            <div className={cx("toolbar-item")}>
-              <TippyHeadLess menuTippy={<h1>Hello</h1>}>
-                <div className={cx("toolbar-item-child")}>
-                  <span>
-                    <PhotoRoundedIcon />
-                  </span>
-                  <p>Màu sắc</p>
-                </div>
-              </TippyHeadLess>
-            </div>
-            <div className={cx("toolbar-item")}>
-              <TippyHeadLess menuTippy={<h1>Hello</h1>}>
-                <div className={cx("toolbar-item-child")}>
-                  <span>
-                    <AutoAwesomeMotionRoundedIcon />
-                  </span>
-                  <p>Mẫu CV</p>
-                </div>
-              </TippyHeadLess>
-            </div>
-            <div className={cx("toolbar-item")}>
-              <TippyHeadLess menuTippy={<h1>Hello</h1>}>
-                <div className={cx("toolbar-item-child")}>
-                  <span>
-                    <PersonRoundedIcon />
-                  </span>
-                  <p>Ảnh hồ sơ</p>
-                </div>
-              </TippyHeadLess>
-            </div>
-            <div className={cx("toolbar-item")}>
-              <div className={cx("toolbar-item-child")}>
-                <button className={cx("btn-download")}>
-                  <span>
-                    <ArrowDownwardRoundedIcon />
-                  </span>
-                  <p>Tải Xuống</p>
-                </button>
-              </div>
-            </div>
-            <div className={cx("toolbar-item")} onClick={handleClickOpen}>
-              <div className={cx("toolbar-item-child")}>
-                <span>
-                  <SaveRoundedIcon />
-                </span>
-                <p>Lưu CV</p>
-              </div>
-            </div>
-            <div className={cx("toolbar-item")}>
-              <TippyHeadLess menuTippy={<h1>Hello</h1>}>
-                <div className={cx("toolbar-item-child")}>
-                  <span>
-                    <ManageAccountsRoundedIcon />
-                  </span>
-                  <p>Quản lí CV</p>
-                </div>
-              </TippyHeadLess>
-            </div>
-          </div>
-        </div>
-      </div>
       <div className={cx("editor")}>
         <div className={cx("cv")}>
           <div className={cx("form-cv")}>

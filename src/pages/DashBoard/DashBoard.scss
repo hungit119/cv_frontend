@@ -151,7 +151,6 @@ main {
 }
 .avata-wrapper {
   display: flex;
-  flex: 3;
   justify-content: end;
 }
 .avata {
@@ -202,5 +201,13 @@ main {
 @media screen and (max-width: 500px) {
   .header {
     padding: 0;
+  }
+}
+
+@media screen and (min-width: 1000px) {
+  .avatar-parent {
+    flex: 3;
+    display: flex;
+    justify-content: flex-end;
   }
 }

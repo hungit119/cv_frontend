@@ -1,5 +1,5 @@
 import classNames from "classnames/bind";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Menu, Sidebar, useProSidebar } from "react-pro-sidebar";
 import style from "./DashBoard.scss";
 
@@ -13,16 +13,73 @@ import AddBoxRoundedIcon from "@mui/icons-material/AddBoxRounded";
 import ViewListRoundedIcon from "@mui/icons-material/ViewListRounded";
 import Person2RoundedIcon from "@mui/icons-material/Person2Rounded";
 import LowPriorityRoundedIcon from "@mui/icons-material/LowPriorityRounded";
-import { Route, Routes } from "react-router-dom";
+import AvatarDefault from "../../access/avatar.jpg";
+import { Link, Route, Routes } from "react-router-dom";
 import FormCV from "../components/FormCV/FormCV";
+import ClickAwayListener from "@mui/material/ClickAwayListener";
+import Grow from "@mui/material/Grow";
+import Paper from "@mui/material/Paper";
+import Popper from "@mui/material/Popper";
+import MenuItem from "@mui/material/MenuItem";
+import MenuList from "@mui/material/MenuList";
+import Button from "@mui/material/Button";
+import { useSelector } from "react-redux";
+import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
+import ExitToAppRoundedIcon from "@mui/icons-material/ExitToAppRounded";
+import Profile from "../components/Profile/Profile";
 const cx = classNames.bind(style);
 export default function DashBoard() {
   const asideRef = useRef(null);
+  const [asideRefCurrent, setAsideRefCurrent] = useState(
+    asideRef.current?.clientWidth || 250
+  );
+  const [collapsed, setCollapsed] = useState(true);
+  const [inputSearchValue, setInputSearchValue] = useState("");
+
+  const avatar = useSelector((state) => state.userReducer.user.avatar);
+  const isLoading = useSelector((state) => state.processReducer.isLoading);
+
+  const [open, setOpen] = React.useState(false);
+  const anchorRef = React.useRef(null);
+
+  const handleToggle = () => {
+    setOpen((prevOpen) => !prevOpen);
+  };
+
+  const handleClose = (event) => {
+    if (anchorRef.current && anchorRef.current.contains(event.target)) {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+  function handleListKeyDown(event) {
+    if (event.key === "Tab") {
+      event.preventDefault();
+      setOpen(false);
+    } else if (event.key === "Escape") {
+      setOpen(false);
+    }
+  }
+
+  // return focus to the button when we transitioned from !open -> open
+  const prevOpen = React.useRef(open);
+  React.useEffect(() => {
+    if (prevOpen.current === true && open === false) {
+      anchorRef.current.focus();
+    }
+
+    prevOpen.current = open;
+  }, [open]);
+
   const handleLogout = () => {
     localStorage.removeItem(ACCESS_TOKEN);
     window.location.reload();
   };
-  const [collapsed, setCollapsed] = useState(true);
+  const handleOnChangeInputSearch = (e) => {
+    setInputSearchValue(e.target.value);
+  };
   return (
     <div
       id="app"
@@ -62,7 +119,10 @@ export default function DashBoard() {
             />
             <button
               className={cx("expand")}
-              onClick={() => setCollapsed(!collapsed)}
+              onClick={() => {
+                setCollapsed(!collapsed);
+                setAsideRefCurrent(asideRef.current?.clientWidth);
+              }}
             >
               <LowPriorityRoundedIcon />
               <span className={cx("expand-span")}></span>
@@ -101,18 +161,21 @@ export default function DashBoard() {
       <div
         className={cx("header")}
         style={{
-          marginLeft: 250 - asideRef.current?.clientWidth,
-          width: `calc(100% - ${250 - asideRef.current?.clientWidth}px) `,
+          marginLeft: 250 - asideRefCurrent,
+          width: `calc(100% - ${250 - asideRefCurrent}px) `,
         }}
       >
         <div className={cx("header-content")}>
           <div className={cx("header-left-content")}>
-            {asideRef.current?.clientWidth === 0 ? (
+            {asideRefCurrent === 0 ? (
               <></>
             ) : (
               <button
                 className={cx("expand")}
-                onClick={() => setCollapsed(!collapsed)}
+                onClick={() => {
+                  setCollapsed(!collapsed);
+                  setAsideRefCurrent(asideRef.current?.clientWidth);
+                }}
               >
                 <ReorderIcon />
                 <span className={cx("expand-span")}></span>
@@ -127,30 +190,97 @@ export default function DashBoard() {
                   type="text"
                   className={cx("search-input")}
                   placeholder="Search anything"
+                  value={inputSearchValue}
+                  onChange={handleOnChangeInputSearch}
+                  name="keyword"
                 />
               </div>
             </div>
           </div>
-          <div className={cx("avata-wrapper")}>
-            <span className={cx("avata")}>
-              <img
-                src="https://jumbo.g-axon.work/images/avatar/avatar3.jpg"
-                alt=""
-                className={cx("avatar-image")}
-              />
-            </span>
+          <div className={cx("avatar-parent")}>
+            <Button
+              ref={anchorRef}
+              id="composition-button"
+              aria-controls={open ? "composition-menu" : undefined}
+              aria-expanded={open ? "true" : undefined}
+              aria-haspopup="true"
+              onClick={handleToggle}
+            >
+              <div className={cx("avata-wrapper")}>
+                <span className={cx("avata")}>
+                  {!isLoading && (
+                    <img
+                      src={avatar ? avatar : AvatarDefault}
+                      alt=""
+                      className={cx("avatar-image")}
+                    />
+                  )}
+                </span>
+              </div>
+            </Button>
+            <Popper
+              open={open}
+              anchorEl={anchorRef.current}
+              role={undefined}
+              placement="bottom-start"
+              transition
+              disablePortal
+            >
+              {({ TransitionProps, placement }) => (
+                <Grow
+                  {...TransitionProps}
+                  style={{
+                    transformOrigin:
+                      placement === "bottom-start" ? "left top" : "left bottom",
+                  }}
+                >
+                  <Paper>
+                    <ClickAwayListener onClickAway={handleClose}>
+                      <MenuList
+                        autoFocusItem={open}
+                        id="composition-menu"
+                        aria-labelledby="composition-button"
+                        onKeyDown={handleListKeyDown}
+                      >
+                        <Link
+                          to={"/profile"}
+                          style={{
+                            textDecoration: "none",
+                            color: "currentcolor",
+                          }}
+                        >
+                          <MenuItem onClick={handleClose}>
+                            <PersonRoundedIcon
+                              style={{ marginRight: "10px" }}
+                            />
+                            <span>Profile</span>
+                          </MenuItem>
+                        </Link>
+                        <MenuItem onClick={handleLogout}>
+                          <ExitToAppRoundedIcon
+                            style={{ marginRight: "10px" }}
+                          />
+                          <span>Logout</span>
+                        </MenuItem>
+                      </MenuList>
+                    </ClickAwayListener>
+                  </Paper>
+                </Grow>
+              )}
+            </Popper>
           </div>
         </div>
       </div>
       <div
         className={cx("content")}
         style={{
-          marginLeft: 250 - asideRef.current?.clientWidth,
-          width: `calc(100% - ${250 - asideRef.current?.clientWidth}px) `,
+          marginLeft: 250 - asideRefCurrent,
+          width: `calc(100% - ${250 - asideRefCurrent}px) `,
         }}
       >
         <Routes>
           <Route path="/new-cv" element={<FormCV />} />
+          <Route path="/profile" element={<Profile />} />
         </Routes>
       </div>
     </div>
