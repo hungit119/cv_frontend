@@ -26,7 +26,9 @@ import Button from "@mui/material/Button";
 import { useSelector } from "react-redux";
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 import ExitToAppRoundedIcon from "@mui/icons-material/ExitToAppRounded";
+import VpnKeyRoundedIcon from "@mui/icons-material/VpnKeyRounded";
 import Profile from "../components/Profile/Profile";
+import ChangePassword from "../components/ChangePassword/ChangePassword";
 const cx = classNames.bind(style);
 export default function DashBoard() {
   const asideRef = useRef(null);
@@ -156,6 +158,11 @@ export default function DashBoard() {
             icon={<Person2RoundedIcon />}
           />
           <div className={cx("home-item")}>OTHER</div>
+          <NavLinkMenuItem
+            path={"/change-password"}
+            text={"Change Password"}
+            icon={<VpnKeyRoundedIcon />}
+          />
         </Menu>
       </Sidebar>
       <div
@@ -231,7 +238,7 @@ export default function DashBoard() {
                   {...TransitionProps}
                   style={{
                     transformOrigin:
-                      placement === "bottom-start" ? "left top" : "left bottom",
+                      placement === "bottom-start" ? "left top" : "right top",
                   }}
                 >
                   <Paper>
@@ -254,6 +261,20 @@ export default function DashBoard() {
                               style={{ marginRight: "10px" }}
                             />
                             <span>Profile</span>
+                          </MenuItem>
+                        </Link>
+                        <Link
+                          to={"/change-password"}
+                          style={{
+                            textDecoration: "none",
+                            color: "currentcolor",
+                          }}
+                        >
+                          <MenuItem onClick={handleClose}>
+                            <VpnKeyRoundedIcon
+                              style={{ marginRight: "10px" }}
+                            />
+                            <span>Change Password</span>
                           </MenuItem>
                         </Link>
                         <MenuItem onClick={handleLogout}>
@@ -280,7 +301,14 @@ export default function DashBoard() {
       >
         <Routes>
           <Route path="/new-cv" element={<FormCV />} />
-          <Route path="/profile" element={<Profile />} />
+          <Route
+            path="/profile"
+            element={<>{!isLoading ? <Profile /> : <></>}</>}
+          />
+          <Route
+            path="/change-password"
+            element={<>{!isLoading ? <ChangePassword /> : <></>}</>}
+          />
         </Routes>
       </div>
     </div>

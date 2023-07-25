@@ -98,7 +98,7 @@ const DivSetting = styled.div`
     margin-left: 10px;
   }
 `;
-const Template1 = ({ email }) => {
+const Template1 = ({ email, sid }) => {
   const [form, setform] = useState({
     userInfo: {
       avatar: "",
@@ -483,6 +483,7 @@ const Template1 = ({ email }) => {
       await axios
         .post(`${config.API}/api/cv/createCv`, {
           ...data,
+          userId: sid,
         })
         .then((response) => responseHandler(response))
         .then((response) => {
@@ -527,7 +528,7 @@ const Template1 = ({ email }) => {
   };
   useEffect(() => {
     fetchAvatars();
-  });
+  }, []);
   return (
     <>
       <Dialog open={openUploadAvata} onClose={handleCloseUploadAvata}>
@@ -707,7 +708,7 @@ const Template1 = ({ email }) => {
                           <DivField>
                             <WcIcon fontSize="13" style={{ color: color }} />
                             <TextFieldCus
-                              placeholder={"Nam"}
+                              placeholder={"Nam / Nữ"}
                               width={80}
                               value={form.userInfo.gender}
                               onChange={handleInputChange}
@@ -722,7 +723,7 @@ const Template1 = ({ email }) => {
                               style={{ color: color }}
                             />
                             <TextFieldCus
-                              placeholder={"11/09/2002"}
+                              placeholder={"dd/mm/yyyy"}
                               width={80}
                               value={form.userInfo.dob}
                               onChange={handleInputChange}
@@ -807,6 +808,7 @@ const Template1 = ({ email }) => {
                     <StyledTextAreaAutoSizeHeader value={"Trình độ học vấn"} />
                     <StyledTextAreaAutoSizeContent
                       placeholder={"Thời gian học tập"}
+                      fontweight={500}
                       value={form.cvInfo.academicLevel.learningTime}
                       name={"learningTime"}
                       onChange={handleChangeInputCvAcademic}

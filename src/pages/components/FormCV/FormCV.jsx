@@ -66,6 +66,7 @@ const FormCV = () => {
   const hide = () => setVisible(false);
   const isLoading = useSelector((state) => state.processReducer.isLoading);
   const email = useSelector((state) => state.userReducer.user.email);
+  const sid = useSelector((state) => state.userReducer.user.sid);
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -99,7 +100,7 @@ const FormCV = () => {
         <div className={cx("cv")}>
           <div className={cx("form-cv")}>
             {!isLoading ? (
-              <Template1 setformValue={setform} email={email} />
+              <Template1 setformValue={setform} email={email} sid={sid} />
             ) : (
               <></>
             )}
