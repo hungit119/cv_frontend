@@ -14,7 +14,7 @@ import {
   IconButton,
   TextField,
 } from "@mui/material";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import avatarPath from "../../../access/avatar.jpg";
 import { useState } from "react";
 import { Box, LinearProgress } from "@mui/material";
@@ -22,6 +22,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import config from "../../../config";
 import { responseHandler } from "../../../services/responseHandler";
+import { setAvatar } from "../../../features/UserSlice";
 const Div = styled.div`
   padding: 12px;
   background-color: white;
@@ -56,6 +57,7 @@ const Div = styled.div`
   }
 `;
 const Profile = () => {
+  const dispatch = useDispatch();
   const user = useSelector((state) => state.userReducer.user);
   const [userInfoForm, setUserInfoForm] = useState(user);
   const [urlAvatar, setUrlAvatar] = useState("");
@@ -72,7 +74,7 @@ const Profile = () => {
       setIsSaving(true);
       const userInfoData = {
         ...userInfoForm,
-        avatar: userInfoForm.avatar ? userInfoForm.avatar : urlAvatar,
+        avatar: urlAvatar ? urlAvatar : userInfoForm.avatar,
       };
       await axios
         .post(`${config.API}/api/user/updateInfo`, {
@@ -107,6 +109,7 @@ const Profile = () => {
         .then((resp) => resp.json())
         .then((data) => {
           setUrlAvatar(data.url);
+          dispatch(setAvatar(data.url));
           setOpenUploadAvata(false);
           setIsUploading(false);
         })
@@ -164,10 +167,10 @@ const Profile = () => {
             <div className="avatar-wrapper">
               <img
                 src={
-                  userInfoForm.avatar
-                    ? userInfoForm.avatar
-                    : urlAvatar !== ""
+                  urlAvatar
                     ? urlAvatar
+                    : userInfoForm.avatar
+                    ? userInfoForm.avatar
                     : avatarPath
                 }
                 alt=""

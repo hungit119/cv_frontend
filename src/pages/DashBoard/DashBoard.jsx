@@ -29,6 +29,7 @@ import ExitToAppRoundedIcon from "@mui/icons-material/ExitToAppRounded";
 import VpnKeyRoundedIcon from "@mui/icons-material/VpnKeyRounded";
 import Profile from "../components/Profile/Profile";
 import ChangePassword from "../components/ChangePassword/ChangePassword";
+import ListMyCv from "../components/ListMyCv/ListMyCv";
 const cx = classNames.bind(style);
 export default function DashBoard() {
   const asideRef = useRef(null);
@@ -304,6 +305,10 @@ export default function DashBoard() {
           <Route
             path="/profile"
             element={<>{!isLoading ? <Profile /> : <></>}</>}
+          />
+          <Route
+            path="/my-cv"
+            element={<>{!isLoading ? <ListMyCv /> : <></>}</>}
           />
           <Route
             path="/change-password"
