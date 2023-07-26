@@ -22,13 +22,13 @@ const ListCv = ({ cvs, isLoadingCvs }) => {
       <Row>
         {cvs && !isLoadingCvs ? (
           cvs.map((cv) => (
-            <Col lg={6}>
+            <Col lg={6} md={6}>
               <CartCv cv={cv} />
             </Col>
           ))
         ) : (
           <>
-            <Col lg={6}>
+            <Col lg={6} md={6}>
               <Card>
                 <CardContent>
                   <Typography component="div">

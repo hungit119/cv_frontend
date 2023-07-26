@@ -10,7 +10,6 @@ import { Col, Container, Row } from "react-bootstrap";
 import ListCv from "../ListCv/ListCv";
 import CvPreviewSelected from "../CvPreviewSelected/CvPreviewSelected";
 const Div = styled.div`
-  background-color: white;
   padding: 24px 12px;
 `;
 const ListMyCv = () => {
@@ -42,10 +41,10 @@ const ListMyCv = () => {
       <Container fluid>
         <Row>
           <Col lg={6}>
-            <ListCv cvs={cvs} isLoadingCvs={isLoadingCvs} />
+            <CvPreviewSelected />
           </Col>
           <Col lg={6}>
-            <CvPreviewSelected />
+            <ListCv cvs={cvs} isLoadingCvs={isLoadingCvs} />
           </Col>
         </Row>
       </Container>

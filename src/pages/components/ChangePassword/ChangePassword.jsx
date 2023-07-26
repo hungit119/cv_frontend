@@ -116,6 +116,7 @@ const ChangePassword = () => {
                 fullWidth
                 variant="contained"
                 onClick={handleClickSaveChange}
+                className="mt-4"
               >
                 Save changes
               </Button>

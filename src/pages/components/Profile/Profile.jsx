@@ -294,6 +294,7 @@ const Profile = () => {
                 fullWidth
                 variant="contained"
                 onClick={handleClickSaveChanges}
+                className="my-4"
               >
                 Save changes
               </Button>
