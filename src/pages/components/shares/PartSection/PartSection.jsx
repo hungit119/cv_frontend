@@ -34,16 +34,21 @@ const PartSection = ({
   onChange,
   sectionName,
   handleChangeDeleteItem,
+  readOnly,
 }) => {
   return (
     <Div>
-      <IconButton
-        className="icon-delete-section-item"
-        aria-label="delete"
-        onClick={() => handleChangeDeleteItem(data.sid, sectionName)}
-      >
-        <DeleteRoundedIcon />
-      </IconButton>
+      {readOnly ? (
+        <></>
+      ) : (
+        <IconButton
+          className="icon-delete-section-item"
+          aria-label="delete"
+          onClick={() => handleChangeDeleteItem(data.sid, sectionName)}
+        >
+          <DeleteRoundedIcon />
+        </IconButton>
+      )}
       <StyledTextAreaAutoSizeContent
         fontweight={500}
         placeholder={"Thời gian làm việc"}

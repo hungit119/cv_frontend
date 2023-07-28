@@ -38,7 +38,7 @@ import PartSection from "../shares/PartSection/PartSection";
 import ProcessSection from "../shares/ProcessSection/ProcessSection";
 import Section from "../shares/Section/Section";
 import TextFieldCus from "../shares/TextFieldCus/TextFieldCus";
-import styles from "./Template1.scss";
+import styles from "./Template1Update.scss";
 
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -138,91 +138,46 @@ const DivSetting = styled.div`
     margin-left: 10px;
   }
 `;
-const Template1 = ({ email, sid }) => {
+const Template1Update = ({ email, sid, cv }) => {
   const [form, setform] = useState({
     userInfo: {
-      avatar: "",
-      fullname: "",
-      gender: "",
-      dob: "",
-      phoneNumber: "",
+      avatar: cv.userInfo.avatar,
+      fullname: cv.userInfo.fullname,
+      gender: cv.userInfo.gender,
+      dob: cv.userInfo.dob,
+      phoneNumber: cv.userInfo.phoneNumber,
       email,
-      address: "",
+      address: cv.userInfo.address,
     },
     cvInfo: {
-      positionJob: "",
+      color: cv.cvInfo.color,
+      positionJob: cv.cvInfo.positionJob,
       careerGoals: {
-        shorttermGoal: "",
-        longTermGoal: "",
+        shorttermGoal: cv.cvInfo.careerGoals.shorttermGoal,
+        longTermGoal: cv.cvInfo.careerGoals.longTermGoal,
       },
       academicLevel: {
-        learningTime: "",
-        schoolName: "",
-        subject: "",
-        content: "",
+        learningTime: cv.cvInfo.academicLevel.learningTime,
+        schoolName: cv.cvInfo.academicLevel.schoolName,
+        subject: cv.cvInfo.academicLevel.subject,
+        content: cv.cvInfo.academicLevel.content,
       },
-      skills: [
-        {
-          sid: v4(),
-          skillName: "",
-          process: 0,
-        },
-      ],
-      experiences: [
-        {
-          sid: v4(),
-          studyTime: "",
-          companyName: "",
-          position: "",
-          content: "",
-        },
-      ],
-      prizes: [
-        {
-          sid: v4(),
-          name: "",
-        },
-      ],
-      certificates: [
-        {
-          sid: v4(),
-          name: "",
-        },
-      ],
-      projectsJoined: [
-        {
-          sid: v4(),
-          name: "",
-          role: "",
-          result: "",
-        },
-      ],
-      activities: [
-        {
-          sid: v4(),
-          name: "",
-        },
-      ],
-      favorites: [
-        {
-          sid: v4(),
-          name: "",
-        },
-      ],
-      moreInfos: [
-        {
-          sid: v4(),
-          name: "",
-        },
-      ],
+      skills: cv.cvInfo.skills,
+      experiences: cv.cvInfo.experiences,
+      prizes: cv.cvInfo.prizes,
+      certificates: cv.cvInfo.certificates,
+      projectsJoined: cv.cvInfo.projectsJoined,
+      activities: cv.cvInfo.activities,
+      favorites: cv.cvInfo.favorites,
+      moreInfos: cv.cvInfo.moreInfos,
     },
   });
   const [editorValue, setEditorValue] = useState("");
-  const [color, setcolor] = useState("#CBBCAE");
+  const [color, setcolor] = useState(cv.cvInfo.color);
   const [isSelectedColor, setIsSelectedColor] = useState("");
   const [openUploadAvata, setOpenUploadAvata] = React.useState(false);
   const [openSaveCv, setOpenSaveCv] = React.useState(false);
-  const [avata, setAvata] = useState("");
+  const [avata, setAvata] = useState(cv.userInfo.avatar);
   const [isSelected, setIsSelected] = useState(false);
   const [url, seturl] = useState("");
   const [isUploading, setIsUploading] = useState(false);
@@ -521,12 +476,12 @@ const Template1 = ({ email, sid }) => {
   const handleClickSaveCv = async () => {
     try {
       const data = form;
-      data.userInfo.avatar = url;
+      data.userInfo.avatar = url ? url : data.userInfo.avatar;
       data.cvInfo.color = color;
       await axios
-        .post(`${config.API}/api/cv/createCv`, {
+        .post(`${config.API}/api/cv/updateCv?sid=${cv.sid}`, {
           ...data,
-          userId: sid,
+          userId: cv.userId,
         })
         .then((response) => responseHandler(response))
         .then((response) => {
@@ -548,34 +503,9 @@ const Template1 = ({ email, sid }) => {
       setOpenSaveCv(false);
     }
   };
-
-  const fetchAvatars = async () => {
-    try {
-      await axios
-        .post(`${config.API}/api/user/avatars`, {
-          folder: email,
-        })
-        .then((response) => responseHandler(response))
-        .then((response) => {
-          seturl(response.images[0]);
-        })
-        .catch((error) => {
-          toast.error(error.response.data.message, {
-            theme: "colored",
-          });
-        });
-    } catch (error) {
-      toast.error(error.response.data.message, {
-        theme: "colored",
-      });
-    }
-  };
   const handleClickSetColor = (value) => {
     setcolor(value);
   };
-  useEffect(() => {
-    fetchAvatars();
-  }, []);
   return (
     <>
       <Dialog open={openUploadAvata} onClose={handleCloseUploadAvata}>
@@ -721,7 +651,7 @@ const Template1 = ({ email, sid }) => {
                       onClick={handleClickOpenUploadAvata}
                     >
                       <img
-                        src={url ? url : avatar}
+                        src={url ? url : cv.userInfo.avatar}
                         alt=""
                         width={250}
                         style={{
@@ -1094,4 +1024,4 @@ const Template1 = ({ email, sid }) => {
   );
 };
 
-export default Template1;
+export default Template1Update;

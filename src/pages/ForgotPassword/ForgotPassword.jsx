@@ -50,10 +50,9 @@ function Copyright(props) {
 
 const defaultTheme = createTheme();
 
-export default function SignIn() {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+export default function ForgotPassword() {
   const isLoading = useSelector((state) => state.processReducer.isLoading);
+  const navigate = useNavigate();
   const isAuthenticate = useSelector(
     (state) => state.authenticateReducer.isAuthenticate
   );
@@ -62,67 +61,17 @@ export default function SignIn() {
       event.preventDefault();
       const data = new FormData(event.currentTarget);
       await axios
-        .post(`${config.API}/api/auth/login`, {
-          username: data.get("username"),
-          password: data.get("password"),
+        .post(`${config.API}/api/auth/forgot-password`, {
+          email: data.get("email"),
         })
         .then((response) => responseHandler(response))
-        .then((response) => {
-          localStorage.setItem(ACCESS_TOKEN, response.accessToken);
-          dispatch(setIsAuthenticate(true));
-          dispatch(setUser(response.user));
-          toast.success(response.message);
-          navigate("/");
-          dispatch(setIsLoading(false));
-        });
+        .then((response) => {});
     } catch (error) {
       toast.error(error.response.data.message, {
         theme: "colored",
       });
-      dispatch(setIsLoading(false));
-      dispatch(setIsAuthenticate(false));
     }
   };
-  const googleSuccess = async (res) => {
-    try {
-      const user = res?.profileObj;
-      const googleId = res?.googleId;
-      await axios
-        .post(`${config.API}/api/auth/google-login`, {
-          data: {
-            ...user,
-            googleId,
-          },
-        })
-        .then((response) => responseHandler(response))
-        .then((response) => {
-          localStorage.setItem(ACCESS_TOKEN, response.accessToken);
-          dispatch(setIsAuthenticate(true));
-          dispatch(setIsLoading(false));
-          toast.success(response.message);
-        });
-    } catch (error) {
-      toast.error(error.message, {
-        theme: "colored",
-      });
-      dispatch(setIsAuthenticate(false));
-    }
-  };
-  const googleFailure = (error) => {
-    console.error(error);
-  };
-  React.useEffect(() => {
-    function start() {
-      gapi.client.init({
-        clientId:
-          "403714864826-4btupt7vlr4mn06gkg3p24uf9uaib166.apps.googleusercontent.com",
-        scope: "email",
-      });
-    }
-
-    gapi.load("client:auth2", start);
-  }, []);
-
   return isAuthenticate ? (
     navigate("/")
   ) : (
@@ -160,7 +109,7 @@ export default function SignIn() {
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
-              Sign in
+              Forgot Password
             </Typography>
             <Box
               component="form"
@@ -172,21 +121,11 @@ export default function SignIn() {
                 margin="normal"
                 required
                 fullWidth
-                id="username"
-                label="Username"
-                name="username"
-                autoComplete="username"
+                id="email"
+                label="Email"
+                name="email"
+                autoComplete="email"
                 autoFocus
-              />
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
               />
               {isLoading ? (
                 <LinearProgress sx={{ mt: 5, mb: 2 }} />
@@ -197,42 +136,17 @@ export default function SignIn() {
                   variant="contained"
                   sx={{ mt: 3, mb: 2 }}
                 >
-                  Sign In
+                  Send Password
                 </Button>
               )}
               <Grid container>
-                <Grid item xs>
-                  <Link href={"/forgot-password"} variant="body2">
-                    Forgot password?
-                  </Link>
-                </Grid>
                 <Grid item>
-                  <Link href="/sign-up" variant="body2">
-                    {"Don't have an account? Sign Up"}
+                  <Link href="/sign-in" variant="body2">
+                    {"Sign in"}
                   </Link>
                 </Grid>
               </Grid>
               <Copyright sx={{ mt: 5 }} />
-              <Grid container sx={{ mt: 3 }}>
-                <GoogleLogin
-                  clientId="403714864826-4btupt7vlr4mn06gkg3p24uf9uaib166.apps.googleusercontent.com"
-                  render={(renderProps) => (
-                    <Button
-                      startIcon={<GoogleIcon />}
-                      onClick={renderProps.onClick}
-                      color="primary"
-                      variant="outlined"
-                      fullWidth
-                      disabled={renderProps.disabled}
-                    >
-                      Login with Google
-                    </Button>
-                  )}
-                  onSuccess={googleSuccess}
-                  onFailure={googleFailure}
-                  cookiePolicy={"single_host_origin"}
-                />
-              </Grid>
             </Box>
           </Box>
         </Grid>

@@ -16,14 +16,15 @@ const StyledTextareaAutosizeHeader = styled(StyledTextField)`
   font-size: 19px;
   font-weight: bold;
   text-transform: uppercase;
-  color: #a49b62;
   width: 100%;
   &:hover {
     outline: #77a5cc dashed 1pt;
   }
 `;
-const StyledTextAreaAutoSizeHeader = ({ value }) => {
-  return <StyledTextareaAutosizeHeader value={value} />;
+const StyledTextAreaAutoSizeHeader = ({ value, color }) => {
+  return (
+    <StyledTextareaAutosizeHeader value={value} style={{ color: color }} />
+  );
 };
 
 export default StyledTextAreaAutoSizeHeader;

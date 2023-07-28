@@ -32,6 +32,7 @@ const TextFieldCus = ({
   onChange,
   name,
   uppercase,
+  readOnly
 }) => {
   const textareaRef = useRef(null);
   function auto_grow() {

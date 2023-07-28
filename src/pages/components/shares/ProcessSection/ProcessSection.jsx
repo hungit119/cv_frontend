@@ -45,16 +45,21 @@ const ProcessSection = ({
   sectionName,
   onChange,
   name,
+  readOnly,
 }) => {
   return (
     <Div>
-      <IconButton
-        className="icon-delete-section-item"
-        aria-label="delete"
-        onClick={() => handleChangeDeleteItem(sid, sectionName)}
-      >
-        <DeleteRoundedIcon />
-      </IconButton>
+      {readOnly ? (
+        <></>
+      ) : (
+        <IconButton
+          className="icon-delete-section-item"
+          aria-label="delete"
+          onClick={() => handleChangeDeleteItem(sid, sectionName)}
+        >
+          <DeleteRoundedIcon />
+        </IconButton>
+      )}
       <div className="header-section">
         <TextFieldCus
           value={section}
@@ -65,20 +70,24 @@ const ProcessSection = ({
           placeholder={"Nhập tên kỹ năng"}
         />
       </div>
-      <div className="btn-control-value">
-        <IconButton
-          aria-label="delete"
-          onClick={() => handleChangeProcessSub(sid)}
-        >
-          <RemoveRoundedIcon />
-        </IconButton>
-        <IconButton
-          aria-label="delete"
-          onClick={() => handleChangeProcessPlus(sid)}
-        >
-          <AddRoundedIcon />
-        </IconButton>
-      </div>
+      {readOnly ? (
+        <></>
+      ) : (
+        <div className="btn-control-value">
+          <IconButton
+            aria-label="delete"
+            onClick={() => handleChangeProcessSub(sid)}
+          >
+            <RemoveRoundedIcon />
+          </IconButton>
+          <IconButton
+            aria-label="delete"
+            onClick={() => handleChangeProcessPlus(sid)}
+          >
+            <AddRoundedIcon />
+          </IconButton>
+        </div>
+      )}
       <ProgressBar now={value} label={`${value}%`} />
       <br />
     </Div>

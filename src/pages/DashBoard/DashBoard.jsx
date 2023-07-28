@@ -23,15 +23,23 @@ import Popper from "@mui/material/Popper";
 import MenuItem from "@mui/material/MenuItem";
 import MenuList from "@mui/material/MenuList";
 import Button from "@mui/material/Button";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 import ExitToAppRoundedIcon from "@mui/icons-material/ExitToAppRounded";
 import VpnKeyRoundedIcon from "@mui/icons-material/VpnKeyRounded";
 import Profile from "../components/Profile/Profile";
 import ChangePassword from "../components/ChangePassword/ChangePassword";
 import ListMyCv from "../components/ListMyCv/ListMyCv";
+import FormCVEdit from "../components/FormCVEdit/FormCVEdit";
+import HomePage from "../HomePage/HomePage";
+import axios from "axios";
+import config from "../../config";
+import { responseHandler } from "../../services/responseHandler";
+import { setCvs } from "../../features/CvSlice";
+import { toast } from "react-toastify";
 const cx = classNames.bind(style);
 export default function DashBoard() {
+  const dispatch = useDispatch();
   const asideRef = useRef(null);
   const [asideRefCurrent, setAsideRefCurrent] = useState(
     asideRef.current?.clientWidth || 250
@@ -82,6 +90,17 @@ export default function DashBoard() {
   };
   const handleOnChangeInputSearch = (e) => {
     setInputSearchValue(e.target.value);
+  };
+  const handleSearchCv = async () => {
+    try {
+      await axios
+        .get(`${config.API}/api/cv/search?keyword=${inputSearchValue}`)
+        .then((response) => responseHandler(response))
+        .then((response) => {
+          dispatch(setCvs(response.cvs));
+          toast.success(response.message);
+        });
+    } catch (error) {}
   };
   return (
     <div
@@ -136,11 +155,6 @@ export default function DashBoard() {
             path={"/"}
             text={"Home"}
             icon={<HomeRoundedIcon />}
-          />
-          <NavLinkMenuItem
-            path={"/edit-cv"}
-            text={"Edit cv"}
-            icon={<ModeEditRoundedIcon />}
           />
           <NavLinkMenuItem
             path={"/new-cv"}
@@ -202,6 +216,21 @@ export default function DashBoard() {
                   onChange={handleOnChangeInputSearch}
                   name="keyword"
                 />
+                <span>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    style={{
+                      borderTopRightRadius: "24px",
+                      borderBottomRightRadius: "24px",
+                      padding: "8px",
+                      fontSize: "14px",
+                    }}
+                    onClick={handleSearchCv}
+                  >
+                    Search
+                  </Button>
+                </span>
               </div>
             </div>
           </div>
@@ -301,6 +330,7 @@ export default function DashBoard() {
         }}
       >
         <Routes>
+          <Route path="/" element={<HomePage />} />
           <Route path="/new-cv" element={<FormCV />} />
           <Route
             path="/profile"
@@ -314,6 +344,7 @@ export default function DashBoard() {
             path="/change-password"
             element={<>{!isLoading ? <ChangePassword /> : <></>}</>}
           />
+          <Route path="/edit-cv" element={<FormCVEdit />} />
         </Routes>
       </div>
     </div>

@@ -9,6 +9,7 @@ import {
   Skeleton,
   Typography,
 } from "@mui/material";
+import { useSelector } from "react-redux";
 const Div = styled.div`
   .avatar {
     display: flex;
@@ -17,13 +18,14 @@ const Div = styled.div`
   }
 `;
 const ListCv = ({ cvs, isLoadingCvs }) => {
+  const cvPreviewed = useSelector((state) => state.cvReducer.cvSelected);
   return (
     <Div>
       <Row>
         {cvs && !isLoadingCvs ? (
           cvs.map((cv) => (
             <Col lg={6} md={6}>
-              <CartCv cv={cv} />
+              <CartCv cv={cv} cvPreviewed={cvPreviewed} />
             </Col>
           ))
         ) : (

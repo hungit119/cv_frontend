@@ -1,0 +1,87 @@
+.wrapper {
+}
+.top-tool {
+  display: flex;
+  height: 46px;
+  justify-content: center;
+  left: 0;
+  margin-top: 16px;
+  position: absolute;
+  right: 30vw;
+  top: 0;
+  z-index: 9;
+  width: 100%;
+}
+.toolbar {
+  background-color: #425061;
+  border-radius: 999px;
+  display: flex;
+  justify-content: center;
+  padding: 0 8px;
+  position: relative;
+  vertical-align: top;
+  white-space: nowrap;
+}
+.toolbar-left {
+  display: flex;
+}
+.toolbar-item {
+  display: flex;
+  align-items: center;
+}
+.toolbar-item-child {
+  color: #fff;
+  display: flex;
+  align-items: start;
+  margin: 0 12px;
+  &:hover {
+    color: #1dbfaf;
+    cursor: pointer;
+  }
+  p {
+    font-size: 16px;
+    margin: 0;
+    margin-left: 5px;
+  }
+}
+.btn-download {
+  background: #1dbfaf;
+  border: none;
+  border-radius: 999px;
+  color: #fff;
+  display: block;
+  font-size: 10px;
+  font-weight: 600;
+  outline: none;
+  padding: 6px 10px;
+  position: relative;
+  transition: background-color 0.25s linear;
+  width: 120px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  p {
+    margin: 0;
+    font-size: 15px;
+  }
+}
+.editor {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.cv {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.form-cv {
+  width: 800px;
+  background-color: white;
+  margin-top: 110px;
+}
+@media screen and (max-width: 800px) {
+  .top-tool {
+    display: none;
+  }
+}

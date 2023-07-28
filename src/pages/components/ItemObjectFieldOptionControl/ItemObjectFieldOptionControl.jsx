@@ -24,17 +24,22 @@ const ItemObjectFieldOptionControl = ({
   sectionName,
   handleChangeDeleteItem,
   onChange,
+  readOnly,
 }) => {
   return (
     <Div>
-      <div
-        className="btn-delete-item-control"
-        onClick={() => handleChangeDeleteItem(data.sid, sectionName)}
-      >
-        <IconButton aria-label="delete">
-          <DeleteIcon style={{ color: "red" }} />
-        </IconButton>
-      </div>
+      {readOnly ? (
+        <></>
+      ) : (
+        <div
+          className="btn-delete-item-control"
+          onClick={() => handleChangeDeleteItem(data.sid, sectionName)}
+        >
+          <IconButton aria-label="delete">
+            <DeleteIcon style={{ color: "red" }} />
+          </IconButton>
+        </div>
+      )}
       {Object.entries(data)
         .filter((dt) => dt[0] !== "sid")
         .map((dt) => (

@@ -25,17 +25,22 @@ const ItemTextFieldOptionControl = ({
   handleChangeDeleteItem,
   sectionName,
   onChange,
+  readOnly,
 }) => {
   return (
     <Div>
-      <div
-        className="btn-delete-item-control"
-        onClick={() => handleChangeDeleteItem(data.sid, sectionName)}
-      >
-        <IconButton aria-label="delete">
-          <DeleteIcon />
-        </IconButton>
-      </div>
+      {readOnly ? (
+        <></>
+      ) : (
+        <div
+          className="btn-delete-item-control"
+          onClick={() => handleChangeDeleteItem(data.sid, sectionName)}
+        >
+          <IconButton aria-label="delete">
+            <DeleteIcon />
+          </IconButton>
+        </div>
+      )}
       <StyledTextAreaAutoSizeContent
         value={data.name}
         placeholder={placeholder}

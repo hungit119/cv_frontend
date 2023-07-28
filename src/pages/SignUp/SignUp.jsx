@@ -250,6 +250,14 @@ export default function SignUp() {
                   </Link>
                 </Grid>
               </Grid>
+              <Grid container justifyContent="flex-start">
+                <Grid item>
+                  <FormControlLabel
+                    control={<Checkbox />}
+                    label="Chấp nhận đồng ý chính sách và bảo mật của Jumbo"
+                  />
+                </Grid>
+              </Grid>
               <Grid container sx={{ mt: 3 }}>
                 <GoogleLogin
                   clientId="403714864826-4btupt7vlr4mn06gkg3p24uf9uaib166.apps.googleusercontent.com"

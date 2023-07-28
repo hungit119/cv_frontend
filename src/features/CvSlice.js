@@ -141,14 +141,23 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   isLoading: true,
   cvInfo: {},
+  cvSelected: {},
+  cvs: [],
 };
 
 const CvSlice = createSlice({
   name: "cv",
   initialState,
-  reducers: {},
+  reducers: {
+    setCvSelected: (state, actions) => {
+      state.cvSelected = actions.payload;
+    },
+    setCvs: (state, action) => {
+      state.cvs = action.payload;
+    },
+  },
 });
 
-export const {} = CvSlice.actions;
+export const { setCvSelected, setCvs } = CvSlice.actions;
 
 export default CvSlice.reducer;
