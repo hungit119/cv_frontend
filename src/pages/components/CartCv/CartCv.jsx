@@ -12,6 +12,7 @@ import styled from "styled-components";
 import EditCalendarRoundedIcon from "@mui/icons-material/EditCalendarRounded";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import UpdateRoundedIcon from "@mui/icons-material/UpdateRounded";
+import DownloadRoundedIcon from "@mui/icons-material/DownloadRounded";
 import VisibilityRoundedIcon from "@mui/icons-material/VisibilityRounded";
 import { Col, Container, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
@@ -43,7 +44,13 @@ const Div = styled.div`
     position: absolute;
     top: 0;
     right: 0;
-    z-index: 10000;
+    z-index: 10;
+  }
+  .download-icon-card {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 10;
   }
   .content-card {
     padding: 10px;
@@ -102,6 +109,7 @@ const CartCv = ({ cv, cvPreviewed }) => {
   const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+
   const handleClickOpen = () => {
     setOpen(true);
   };

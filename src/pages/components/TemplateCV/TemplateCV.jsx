@@ -2,7 +2,7 @@ import CalendarMonthRoundedIcon from "@mui/icons-material/CalendarMonthRounded";
 import CottageRoundedIcon from "@mui/icons-material/CottageRounded";
 import EmailRoundedIcon from "@mui/icons-material/EmailRounded";
 import LocalPhoneRoundedIcon from "@mui/icons-material/LocalPhoneRounded";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import styled from "styled-components";
 import ItemObjectFieldOptionControl from "../ItemObjectFieldOptionControl/ItemObjectFieldOptionControl";
@@ -11,9 +11,12 @@ import StyledTextAreaAutoSizeContent from "../StyledTextAreaAutoSizeContent/Styl
 import StyledTextAreaAutoSizeHeader from "../StyledTextAreaAutoSizeHeader/StyledTextAreaAutoSizeHeader";
 import PartSection from "../shares/PartSection/PartSection";
 import ProcessSection from "../shares/ProcessSection/ProcessSection";
+import DownloadRoundedIcon from "@mui/icons-material/DownloadRounded";
 
 import WcIcon from "@mui/icons-material/Wc";
 import TextFieldCus from "../shares/TextFieldCus/TextFieldCus";
+import { Button } from "@mui/material";
+import jsPDF from "jspdf";
 
 const Div = styled.div`
   cursor: pointer;
@@ -23,13 +26,38 @@ const DivField = styled.div`
   align-items: center;
 `;
 const TemplateCV = ({ cv }) => {
+  const cvRef = useRef(null);
+  const handleGeneratePdf = () => {
+    const doc = new jsPDF({
+      format: "a4",
+      unit: "px",
+    });
+
+    // Adding the fonts.
+    doc.setFont("Inter-Regular", "normal");
+
+    doc.html(cvRef.current, {
+      async callback(doc) {
+        await doc.save(`${cv.userInfo.email}_${cv.cvInfo.positionJob}.pdf`);
+      },
+    });
+  };
   return (
     <Div>
       <div
         className="cv-content"
         style={{ border: `2px solid ${cv.cvInfo.color}`, borderRadius: "12px" }}
       >
-        <div className="header-form-cv">
+        <div className="download-icon-card">
+          <Button
+            variant="contained"
+            color="success"
+            onClick={handleGeneratePdf}
+          >
+            <DownloadRoundedIcon />
+          </Button>
+        </div>
+        <div className="header-form-cv" ref={cvRef}>
           <Container fluid>
             <Row>
               <Col lg={6}>
