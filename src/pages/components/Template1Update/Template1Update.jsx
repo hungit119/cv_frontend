@@ -1,17 +1,10 @@
-import ArrowDownwardRoundedIcon from "@mui/icons-material/ArrowDownwardRounded";
-import AutoAwesomeMotionRoundedIcon from "@mui/icons-material/AutoAwesomeMotionRounded";
 import CalendarMonthRoundedIcon from "@mui/icons-material/CalendarMonthRounded";
-import ColorLensIcon from "@mui/icons-material/ColorLens";
 import CottageRoundedIcon from "@mui/icons-material/CottageRounded";
-import DownloadRoundedIcon from "@mui/icons-material/DownloadRounded";
 import EmailRoundedIcon from "@mui/icons-material/EmailRounded";
-import FontDownloadRoundedIcon from "@mui/icons-material/FontDownloadRounded";
 import LocalPhoneRoundedIcon from "@mui/icons-material/LocalPhoneRounded";
 import ManageAccountsRoundedIcon from "@mui/icons-material/ManageAccountsRounded";
-import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 import PhotoRoundedIcon from "@mui/icons-material/PhotoRounded";
-import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
-import SettingsIcon from "@mui/icons-material/Settings";
+import SystemUpdateAltRoundedIcon from "@mui/icons-material/SystemUpdateAltRounded";
 import WcIcon from "@mui/icons-material/Wc";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -19,14 +12,12 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import IconButton from "@mui/material/IconButton";
 import TextField from "@mui/material/TextField";
 import classNames from "classnames/bind";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import styled from "styled-components";
 import { v4 } from "uuid";
-import avatar from "../../../access/no_avatar.jpg";
 import ItemObjectFieldOptionControl from "../ItemObjectFieldOptionControl/ItemObjectFieldOptionControl";
 import ItemTextFieldOptionControl from "../ItemTextFieldOptionControl/ItemTextFieldOptionControl";
 import SectionOptionControl from "../SectionOptionControl/SectionOptionControl";
@@ -40,13 +31,13 @@ import Section from "../shares/Section/Section";
 import TextFieldCus from "../shares/TextFieldCus/TextFieldCus";
 import styles from "./Template1Update.scss";
 
+import RectangleRoundedIcon from "@mui/icons-material/RectangleRounded";
+import { Box, LinearProgress } from "@mui/material";
 import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import config from "../../../config";
 import { responseHandler } from "../../../services/responseHandler";
-import { Box, LinearProgress } from "@mui/material";
-import RectangleRoundedIcon from "@mui/icons-material/RectangleRounded";
-import { useNavigate } from "react-router-dom";
 const cx = classNames.bind(styles);
 
 const colors = [
@@ -604,20 +595,20 @@ const Template1Update = ({ email, sid, cv }) => {
             <div className={cx("toolbar-item")} onClick={handleClickOpenSaveCv}>
               <div className={cx("toolbar-item-child")}>
                 <span>
-                  <SaveRoundedIcon />
+                  <SystemUpdateAltRoundedIcon />
                 </span>
-                <p>Lưu CV</p>
+                <p>Update CV</p>
               </div>
             </div>
             <div className={cx("toolbar-item")}>
-              <TippyHeadLess menuTippy={<h1>Hello</h1>}>
+              <Link to={"/my-cv"} style={{ textDecoration: "none" }}>
                 <div className={cx("toolbar-item-child")}>
                   <span>
                     <ManageAccountsRoundedIcon />
                   </span>
                   <p>Quản lí CV</p>
                 </div>
-              </TippyHeadLess>
+              </Link>
             </div>
           </div>
         </div>

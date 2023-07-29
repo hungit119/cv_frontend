@@ -46,7 +46,7 @@ import config from "../../../config";
 import { responseHandler } from "../../../services/responseHandler";
 import { Box, LinearProgress } from "@mui/material";
 import RectangleRoundedIcon from "@mui/icons-material/RectangleRounded";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 const cx = classNames.bind(styles);
 
 const colors = [
@@ -680,14 +680,14 @@ const Template1 = ({ email, sid }) => {
               </div>
             </div>
             <div className={cx("toolbar-item")}>
-              <TippyHeadLess menuTippy={<h1>Hello</h1>}>
+              <Link to={"/my-cv"} style={{ textDecoration: "none" }}>
                 <div className={cx("toolbar-item-child")}>
                   <span>
                     <ManageAccountsRoundedIcon />
                   </span>
                   <p>Quản lí CV</p>
                 </div>
-              </TippyHeadLess>
+              </Link>
             </div>
           </div>
         </div>

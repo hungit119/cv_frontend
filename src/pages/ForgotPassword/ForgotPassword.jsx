@@ -65,7 +65,10 @@ export default function ForgotPassword() {
           email: data.get("email"),
         })
         .then((response) => responseHandler(response))
-        .then((response) => {});
+        .then((response) => {
+          toast.success(response.message);
+          navigate("/sign-in");
+        });
     } catch (error) {
       toast.error(error.response.data.message, {
         theme: "colored",
