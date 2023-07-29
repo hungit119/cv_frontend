@@ -27,11 +27,14 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { setIsLoading } from "../../features/ProcessSlice";
 import { LinearProgress } from "@mui/material";
+import ReCAPTCHA from "react-google-recaptcha";
 import { useState } from "react";
 
 const defaultTheme = createTheme();
 
 export default function SignUp() {
+  const [isRobot, setIsRobot] = React.useState(true);
+  const capchaRef = React.useRef(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const isLoading = useSelector((state) => state.processReducer.isLoading);
@@ -46,6 +49,26 @@ export default function SignUp() {
   const isAuthenticate = useSelector(
     (state) => state.authenticateReducer.isAuthenticate
   );
+  const handleOnCapcha = async (value) => {
+    try {
+      await axios
+        .post(`${config.API}/api/auth/capchaCheck`, {
+          token: value,
+        })
+        .then((response) => responseHandler(response))
+        .then((response) => {
+          toast.success(response.message);
+          setIsRobot(false);
+          capchaRef.current.reset();
+        });
+    } catch (error) {
+      toast.error(error.response.data.message, {
+        theme: "colored",
+      });
+      setIsRobot(true);
+      capchaRef.current.reset();
+    }
+  };
   const handleSubmit = async (event) => {
     try {
       event.preventDefault();
@@ -234,14 +257,23 @@ export default function SignUp() {
               {isLoading ? (
                 <LinearProgress sx={{ mt: 5, mb: 2 }} />
               ) : (
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  sx={{ mt: 3, mb: 2 }}
-                >
-                  Sign Up
-                </Button>
+                <>
+                  <br />
+                  <ReCAPTCHA
+                    sitekey={config.COPYSITEKEY}
+                    onChange={handleOnCapcha}
+                    ref={capchaRef}
+                  />
+                  <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    sx={{ mt: 3, mb: 2 }}
+                    disabled={isRobot}
+                  >
+                    Sign Up
+                  </Button>
+                </>
               )}
               <Grid container justifyContent="flex-end">
                 <Grid item>

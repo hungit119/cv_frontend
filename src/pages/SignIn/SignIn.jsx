@@ -1,33 +1,31 @@
-import * as React from "react";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Avatar from "@mui/material/Avatar";
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
+import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
 import Paper from "@mui/material/Paper";
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import GoogleLogin from "react-google-login";
-import { gapi } from "gapi-script";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
 import axios from "axios";
+import { gapi } from "gapi-script";
+import * as React from "react";
+import GoogleLogin from "react-google-login";
 
 import GoogleIcon from "@mui/icons-material/Google";
-import config from "../../config";
-import { responseHandler } from "../../services/responseHandler";
+import { LinearProgress } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import config from "../../config";
+import { ACCESS_TOKEN } from "../../constant";
 import { setIsAuthenticate } from "../../features/AuthenticateSlice";
 import { setIsLoading } from "../../features/ProcessSlice";
-import { LinearProgress } from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import { ACCESS_TOKEN } from "../../constant";
 import { setUser } from "../../features/UserSlice";
-
+import { responseHandler } from "../../services/responseHandler";
+import ReCAPTCHA from "react-google-recaptcha";
 function Copyright(props) {
   return (
     <Typography
@@ -51,12 +49,32 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function SignIn() {
+  const [isRobot, setIsRobot] = React.useState(true);
+  const capchaRef = React.useRef(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const isLoading = useSelector((state) => state.processReducer.isLoading);
   const isAuthenticate = useSelector(
     (state) => state.authenticateReducer.isAuthenticate
   );
+  const handleOnCapcha = async (value) => {
+    try {
+      await axios
+        .post(`${config.API}/api/auth/capchaCheck`, {
+          token: value,
+        })
+        .then((response) => responseHandler(response))
+        .then((response) => {
+          toast.success(response.message);
+          setIsRobot(false);
+        });
+    } catch (error) {
+      toast.error(error.response.data.message, {
+        theme: "colored",
+      });
+      setIsRobot(true);
+    }
+  };
   const handleSubmit = async (event) => {
     try {
       event.preventDefault();
@@ -191,14 +209,22 @@ export default function SignIn() {
               {isLoading ? (
                 <LinearProgress sx={{ mt: 5, mb: 2 }} />
               ) : (
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  sx={{ mt: 3, mb: 2 }}
-                >
-                  Sign In
-                </Button>
+                <>
+                  <ReCAPTCHA
+                    sitekey={config.COPYSITEKEY}
+                    onChange={handleOnCapcha}
+                    ref={capchaRef}
+                  />
+                  <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    sx={{ mt: 3, mb: 2 }}
+                    disabled={isRobot}
+                  >
+                    Sign In
+                  </Button>
+                </>
               )}
               <Grid container>
                 <Grid item xs>
